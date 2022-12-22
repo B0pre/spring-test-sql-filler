@@ -3,19 +3,19 @@ package org.bopre.test.spring.sqlfiller.processor;
 import org.bopre.test.spring.sqlfiller.processor.obj.ParameterDefinition;
 import org.bopre.test.spring.sqlfiller.processor.obj.SupportedType;
 import org.bopre.test.spring.sqlfiller.processor.obj.TemplateProcessingResult;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SqlTemplateProcessorImplTest {
 
     private SqlTemplateProcessor sqlTemplateProcessor;
 
-    @Before
+    @BeforeEach
     public void beforeEach() {
         sqlTemplateProcessor = new SqlTemplateProcessorImpl();
     }
@@ -92,7 +92,7 @@ public class SqlTemplateProcessorImplTest {
 
         final TemplateProcessingResult actual = sqlTemplateProcessor.processSql(sqlTemplate);
 
-        assertEquals("wrong sql processing", expected, actual.getParameters());
+        assertEquals(expected, actual.getParameters(), "wrong sql processing");
     }
 
 }
