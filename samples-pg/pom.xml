@@ -35,7 +35,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>spring-test-sql-filler-core</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
