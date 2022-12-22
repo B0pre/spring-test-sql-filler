@@ -13,6 +13,7 @@
     <modules>
         <module>samples-pg</module>
         <module>core</module>
+        <module>api</module>
     </modules>
 
     <properties>
