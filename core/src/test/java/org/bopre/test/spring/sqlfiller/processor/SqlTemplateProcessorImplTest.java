@@ -40,14 +40,14 @@ public class SqlTemplateProcessorImplTest {
                 "    field1,\n" +
                 "    field2\n" +
                 ") values (\n" +
-                "    #{LONG/id:0}\n" +
+                "    #{INT/id:0}\n" +
                 "    #{INT/field0:1},\n" +
                 "    #{DOUBLE/field1:1.1},\n" +
                 "    #{STRING/field2:qwerty qwerty}\n" +
                 ");\n";
 
         final String actual = sqlTemplateProcessor.processSql(sqlTemplate).getSql();
-        assertEquals("wrong sql processing", expected, actual);
+        assertEquals(expected, actual, "wrong sql processing");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class SqlTemplateProcessorImplTest {
                 "    field0,\n" +
                 "    field1\n" +
                 ") values (\n" +
-                "    #{LONG/id:0}\n" +
+                "    #{INT/id:0}\n" +
                 "    #{INT/field0:1},\n" +
                 "    #{DOUBLE/field1:1.1},\n" +
                 "    #{STRING/field2:qwerty qwerty}\n" +
@@ -65,7 +65,7 @@ public class SqlTemplateProcessorImplTest {
 
         final List<ParameterDefinition> expected = Arrays.asList(
                 ParameterDefinition.builder()
-                        .type(SupportedType.LONG)
+                        .type(SupportedType.INT)
                         .index(1)
                         .name("id")
                         .defaultValue("0")
