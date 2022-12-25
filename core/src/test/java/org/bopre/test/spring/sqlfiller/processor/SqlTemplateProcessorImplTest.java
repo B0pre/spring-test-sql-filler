@@ -95,4 +95,36 @@ public class SqlTemplateProcessorImplTest {
         assertEquals(expected, actual.getParameters(), "wrong sql processing");
     }
 
+    @Test
+    public void testProcessSqlParamsOneLineTemplate() {
+        final String expectedSql = "insert into example(id, name, rating) values (?1, ?2, ?3)";
+        final String sqlTemplate = "insert into example(id, name, rating) values (#{INT/id:0}, #{STRING/name:}, #{DOUBLE/rating:0.0})";
+
+        final List<ParameterDefinition> expected = Arrays.asList(
+                ParameterDefinition.builder()
+                        .type(SupportedType.INT)
+                        .index(1)
+                        .name("id")
+                        .defaultValue("0")
+                        .build(),
+                ParameterDefinition.builder()
+                        .type(SupportedType.STRING)
+                        .index(2)
+                        .name("name")
+                        .defaultValue("")
+                        .build(),
+                ParameterDefinition.builder()
+                        .type(SupportedType.DOUBLE)
+                        .index(3)
+                        .name("rating")
+                        .defaultValue("0.0")
+                        .build()
+        );
+
+        final TemplateProcessingResult actual = sqlTemplateProcessor.processSql(sqlTemplate);
+
+        assertEquals(expected, actual.getParameters(), "wrong sql processing");
+        assertEquals(expectedSql, actual.getSql(), "wrong sql processing");
+    }
+
 }

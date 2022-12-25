@@ -15,7 +15,7 @@ public class SqlTemplateProcessorImpl implements SqlTemplateProcessor {
         final TemplateProcessingResult.Builder resultBuilder = TemplateProcessingResult.builder()
                 .originTemplate(sqlTemplate);
 
-        final String patternStr = "#\\{.*}";
+        final String patternStr = "#\\{.*?}";
         final Pattern pattern = Pattern.compile(patternStr);
         final StringBuffer out = new StringBuffer();
         final Matcher matcher = pattern.matcher(sqlTemplate);
