@@ -28,7 +28,7 @@ public class SqlTemplateProcessorImpl implements SqlTemplateProcessor {
             final ParameterDefinition parameterDefinition = analyzeReplacement(currentIndex, replacement);
             resultBuilder.parameter(parameterDefinition);
 
-            final String replaceWith = "?" + currentIndex;
+            final String replaceWith = "?";
             matcher.appendReplacement(out, replaceWith);
         }
         matcher.appendTail(out);

@@ -28,10 +28,10 @@ public class SqlTemplateProcessorImplTest {
                 "    field1,\n" +
                 "    field2\n" +
                 ") values (\n" +
-                "    ?1\n" +
-                "    ?2,\n" +
-                "    ?3,\n" +
-                "    ?4\n" +
+                "    ?\n" +
+                "    ?,\n" +
+                "    ?,\n" +
+                "    ?\n" +
                 ");\n";
 
         final String sqlTemplate = "insert into test_table (\n" +
@@ -97,7 +97,7 @@ public class SqlTemplateProcessorImplTest {
 
     @Test
     public void testProcessSqlParamsOneLineTemplate() {
-        final String expectedSql = "insert into example(id, name, rating) values (?1, ?2, ?3)";
+        final String expectedSql = "insert into example(id, name, rating) values (?, ?, ?)";
         final String sqlTemplate = "insert into example(id, name, rating) values (#{INT/id:0}, #{STRING/name:}, #{DOUBLE/rating:0.0})";
 
         final List<ParameterDefinition> expected = Arrays.asList(
