@@ -1,0 +1,6 @@
+CREATE TABLE user_rating(
+    id INT PRIMARY KEY,
+    user_id INT UNIQUE,
+    rating DOUBLE PRECISION,
+    FOREIGN KEY (user_id) references r_user(id)
+);
