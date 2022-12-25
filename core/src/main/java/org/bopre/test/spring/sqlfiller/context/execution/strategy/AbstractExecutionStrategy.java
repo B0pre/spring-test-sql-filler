@@ -12,6 +12,8 @@ import org.bopre.test.spring.sqlfiller.processor.SqlTemplateProcessorImpl;
 import org.bopre.test.spring.sqlfiller.processor.obj.ParameterDefinition;
 import org.bopre.test.spring.sqlfiller.processor.obj.TemplateProcessingResult;
 import org.bopre.test.spring.sqlfiller.utils.ordering.ComparableWrap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -22,6 +24,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class AbstractExecutionStrategy implements ExecutionStrategy {
+
+    private final Logger logger = LoggerFactory.getLogger(AbstractExecutionStrategy.class);
 
     private final TypeBehaviourFactory typeBehaviourFactory = new TypeBehaviourFactoryImpl();
     private final SqlTemplateProcessor sqlTemplateProcessor = new SqlTemplateProcessorImpl();
@@ -54,14 +58,19 @@ public abstract class AbstractExecutionStrategy implements ExecutionStrategy {
 
     private void execute(DataSource dataSource, String sqlTemplate, SqlTemplateProperties properties) {
         try {
+            logger.debug("execute template: {}", sqlTemplate);
             final TemplateProcessingResult processingResult = sqlTemplateProcessor.processSql(sqlTemplate);
-            final PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(processingResult.getSql());
+            final String sql = processingResult.getSql();
+            logger.debug("prepared sql: {}", sql);
+
+            final PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
 
             //apply parameters for template
             for (ParameterDefinition parameterDefinition : processingResult.getParameters()) {
                 final int index = parameterDefinition.getIndex();
                 final String value = properties.getProperty(parameterDefinition.getName())
                         .orElse(parameterDefinition.getDefaultValue());
+                logger.debug("apply parameter[{}], index={}, value={}::{}", parameterDefinition.getName(), index, value, parameterDefinition.getType());
                 typeBehaviourFactory.getBehaviour(parameterDefinition.getType())
                         .considerArgument(preparedStatement, index, value);
             }
