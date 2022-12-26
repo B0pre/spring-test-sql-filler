@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.bopre.test</groupId>
         <artifactId>spring-test-sql-filler-parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
     </parent>
 
 </project>
