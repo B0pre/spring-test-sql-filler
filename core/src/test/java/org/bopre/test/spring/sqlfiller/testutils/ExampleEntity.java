@@ -8,9 +8,9 @@ public class ExampleEntity {
     public static final String DROP_EXAMPLE_TABLE = "DROP TABLE IF EXISTS example";
     private final int id;
     private final String name;
-    private final double rating;
+    private final Double rating;
 
-    public ExampleEntity(int id, String name, double rating) {
+    public ExampleEntity(int id, String name, Double rating) {
         this.id = id;
         this.name = name;
         this.rating = rating;
@@ -28,7 +28,7 @@ public class ExampleEntity {
         return name;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
@@ -37,7 +37,7 @@ public class ExampleEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExampleEntity that = (ExampleEntity) o;
-        return id == that.id && Double.compare(that.rating, rating) == 0 && Objects.equals(name, that.name);
+        return id == that.id && Objects.equals(that.rating, rating) && Objects.equals(name, that.name);
     }
 
     @Override

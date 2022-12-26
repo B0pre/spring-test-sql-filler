@@ -31,7 +31,7 @@ public class ExampleEntityTestUtils {
                         new ExampleEntity(
                                 rs.getInt("id"),
                                 rs.getString("name"),
-                                rs.getDouble("rating")
+                                (Double) rs.getObject("rating")
                         )
                 );
             }

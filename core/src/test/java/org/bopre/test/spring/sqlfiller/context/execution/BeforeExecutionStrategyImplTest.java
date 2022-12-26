@@ -91,5 +91,23 @@ class BeforeExecutionStrategyImplTest extends AbstractExecutionStrategyTest {
         Assertions.assertEquals(expected, actual, "wrong list");
     }
 
+    @Test
+    @Sql(statements = CREATE_EXAMPLE_TABLE, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = DROP_EXAMPLE_TABLE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    void simpleSqlExecutionNullArgument() {
+        beforeExecutionStrategy.executeAll(contextOf(dataSource), Arrays.asList(
+                createDirectSql("insert into example(id, name, rating) values (#{INT/id:0},#{STRING/name}, #{DOUBLE/rating})", new HashMap<String, String>() {{
+                    this.put("id", "12");
+                }})
+        ));
+
+        final List<ExampleEntity> expected = Arrays.asList(
+                new ExampleEntity(12, null, null)
+        );
+        final List<ExampleEntity> actual = getAllExamples(dataSource);
+
+        Assertions.assertEquals(expected, actual, "wrong list");
+    }
+
 
 }
