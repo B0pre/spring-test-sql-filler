@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -57,13 +58,13 @@ public abstract class AbstractExecutionStrategy implements ExecutionStrategy {
     protected abstract Optional<String> getSqlTemplate(SqlPreparation sqlPreparation);
 
     private void execute(DataSource dataSource, String sqlTemplate, SqlTemplateProperties properties) {
-        try {
+        try (Connection connection = dataSource.getConnection()) {
             logger.debug("execute template: {}", sqlTemplate);
             final TemplateProcessingResult processingResult = sqlTemplateProcessor.processSql(sqlTemplate);
             final String sql = processingResult.getSql();
             logger.debug("prepared sql: {}", sql);
 
-            final PreparedStatement preparedStatement = dataSource.getConnection().prepareStatement(sql);
+            final PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             //apply parameters for template
             for (ParameterDefinition parameterDefinition : processingResult.getParameters()) {
@@ -75,6 +76,7 @@ public abstract class AbstractExecutionStrategy implements ExecutionStrategy {
                         .considerArgument(preparedStatement, index, value);
             }
             preparedStatement.execute();
+            preparedStatement.close();
         } catch (SQLException e) {
             throw new SqlPreparationException(e);
         }
