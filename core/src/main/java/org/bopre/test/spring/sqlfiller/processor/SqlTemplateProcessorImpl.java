@@ -38,13 +38,13 @@ public class SqlTemplateProcessorImpl implements SqlTemplateProcessor {
     }
 
     private ParameterDefinition analyzeReplacement(int index, String replacement) {
-        final Pattern pattern = Pattern.compile("#\\{(?<type>[A-Z]+)/(?<name>[^:]*):(?<default>[^}]*)\\}");
+        final Pattern pattern = Pattern.compile("#\\{((?<type>[A-Z]+)/)?(?<name>[^:]*)(:(?<default>[^}]*))?\\}");
         final Matcher matcher = pattern.matcher(replacement);
 
         if (!matcher.find())
             throw new IllegalArgumentPlaceholderException("invalid placeholder: " + replacement);
 
-        final String type = matcher.group("type");
+        final String type = orDefault(matcher.group("type"), SupportedType.STRING.name());
         final String name = matcher.group("name");
         final String defaultValue = matcher.group("default");
 
@@ -54,6 +54,12 @@ public class SqlTemplateProcessorImpl implements SqlTemplateProcessor {
                 .name(name)
                 .defaultValue(defaultValue)
                 .build();
+    }
+
+    private String orDefault(String value, String defaultV) {
+        if (value == null)
+            return defaultV;
+        return value;
     }
 
 }

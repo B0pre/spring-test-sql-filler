@@ -127,4 +127,64 @@ public class SqlTemplateProcessorImplTest {
         assertEquals(expectedSql, actual.getSql(), "wrong sql processing");
     }
 
+    @Test
+    public void testProcessSqlParamsDefaultTypeIsString() {
+        final String sqlTemplate = "insert into example(name)" +
+                " values (" +
+                "#{name:}" +
+                ")";
+
+        final List<ParameterDefinition> expected = Arrays.asList(
+                ParameterDefinition.builder()
+                        .type(SupportedType.STRING)
+                        .index(1)
+                        .name("name")
+                        .defaultValue("")
+                        .build()
+        );
+
+        final TemplateProcessingResult actual = sqlTemplateProcessor.processSql(sqlTemplate);
+        assertEquals(expected, actual.getParameters(), "wrong sql processing");
+    }
+
+    @Test
+    public void testProcessSqlParamsDefaultValueIsNull() {
+        final String sqlTemplate = "insert into example(name)" +
+                " values (" +
+                "#{INT/name}" +
+                ")";
+
+        final List<ParameterDefinition> expected = Arrays.asList(
+                ParameterDefinition.builder()
+                        .type(SupportedType.INT)
+                        .index(1)
+                        .name("name")
+                        .defaultValue(null)
+                        .build()
+        );
+
+        final TemplateProcessingResult actual = sqlTemplateProcessor.processSql(sqlTemplate);
+        assertEquals(expected, actual.getParameters(), "wrong sql processing");
+    }
+
+    @Test
+    public void testProcessSqlParamsDefaultsOnly() {
+        final String sqlTemplate = "insert into example(name)" +
+                " values (" +
+                "#{name}" +
+                ")";
+
+        final List<ParameterDefinition> expected = Arrays.asList(
+                ParameterDefinition.builder()
+                        .type(SupportedType.STRING)
+                        .index(1)
+                        .name("name")
+                        .defaultValue(null)
+                        .build()
+        );
+
+        final TemplateProcessingResult actual = sqlTemplateProcessor.processSql(sqlTemplate);
+        assertEquals(expected, actual.getParameters(), "wrong sql processing");
+    }
+
 }
